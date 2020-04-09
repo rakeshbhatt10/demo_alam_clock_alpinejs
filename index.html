@@ -1,0 +1,136 @@
+<html>
+    <head>
+        <title>Alarm clock generation</title>
+
+        <script nomodule src="https://unpkg.com/browser-es-module-loader/dist/babel-browser-build.js"></script>
+        <script nomodule src="https://unpkg.com/browser-es-module-loader"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+
+        <script src="js/alarm.js"></script>
+    </head>
+
+    <body>  
+        <div class="container-lg" x-data='loadAlarmConfig()' x-init='() =>  {
+            statTimer();
+        }'>
+            <div class="row" >
+                <div class="col">
+                        <div class="col-md-12 text-center">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row form-group text-center">
+                                        <div class="col">
+                                            <label for="">Hour</label>
+                                            <span type="text" x-text="time.hour"  class="form-control">
+                                        </div>
+                                        <div class="col">
+                                            <label for="">Minute</label>
+                                            <span type="text" x-text="time.minute"  class="form-control">
+                                        </div>
+                                        <div class="col">
+                                            <label for="">Seconds</label>
+                                            <span type="text" x-text="time.second"  class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12"> 
+                                            <button class="btn btn-info" @click="createAlarm()">Create Alarm</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col" x-show="create_alarm">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <label for="">Title</label>
+                                                            <input placeholder="Type alarm title here" type="text" x-model="alarm.title" class="form-control">
+                                                        </div>
+                                                        <div class="w-100"></div>
+                                                        <div class="col">
+                                                            <label for="">Hour</label>
+                                                            <input type="number" x-model="alarm.hour" class="form-control">
+                                                        </div>
+                                                        <div class="col">
+                                                            <label for="">Minute</label>
+                                                            <input type="number" x-model="alarm.minute" class="form-control">
+                                                        </div>
+                                                        <div class="col">
+                                                            <label for="">AM/PM</label>
+                                                            <select class="form-control" name="" x-model="alarm.a" id="">
+                                                                <option value="AM">AM</option>
+                                                                <option value="PM">PM</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mt-2">
+                                                        <div class="col-md-12">
+                                                            <button class="btn btn-primary" @click="saveAlarm()">
+                                                                Save
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div x-show="is_alarm_error" class="row">
+                                                        <div class="col">
+                                                            <span x-text="alarm_error" class="text text-danger">
+                
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div x-show="alarms.length > 0" class="row">
+                        <div class="col-md-12">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th colspan="4" class="text-center">
+                                            ALARMS
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Total Time</th>
+                                        <th>Time left</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template x-for="item in alarms" :key="item">
+                                        <tr x-bind:class="{ 'alert-danger': !item.active }" >
+                                            <td x-text="item.title"></td>
+                                            <td x-text="item.label"></td>
+                                            <td x-text="item.time_left"></td>
+                                            <td>
+                                                <button x-show="item.active" @click="deactivateAlarm(item.index)" class="btn btn-danger">
+                                                    Stop
+                                                </button>
+                                                <button x-show="!item.active" class="btn btn-danger">
+                                                    Stopped
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+        </div>
+    </body>
+</html>
