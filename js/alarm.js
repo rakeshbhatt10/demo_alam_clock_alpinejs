@@ -6,41 +6,35 @@ function loadAlarmConfig() {
 
     return  {
         time: {
-            "day":   moment().local().format("DD"),
-            "month":  moment().local().format("MM"),
-            "hour": moment().local().format("h"),
-            "minute": moment().local().format("m"),
-            "second": moment().local().format("s"),
+            hour: moment().local().format("h"),
+            minute: moment().local().format("m"),
+            second: moment().local().format("s"),
             a: moment().local().format("A"),
-            year:  moment().local().format("YYYY")
         },
         alarms: [],
         create_alarm: false,
         alarm_error: '',
         is_alarm_error: false,
         alarm: {
-            "hour": 0,
-            "minute": 00,
-            "second": 00,
-            "title": ""
+            hour: 0,
+            minute: 00,
+            second: 00,
+            title: ""
         },
         statTimer: function() {
 
             const self = this;
             this.create_alarm_button = true;
 
-            function updateValue() {
-                self.time.day = moment().local().format("D");
-                self.time.month = moment().local().format("M");
+            function updateClock() {
                 self.time.hour = moment().local().format("h");
                 self.time.minute = moment().local().format("m");
                 self.time.second = moment().local().format("s"); 
-                self.time.a = moment().local().format("A");               
+                self.time.a = moment().local().format("A");  
             }
 
             setInterval(() => {
-                // console.log("Updating things");
-                updateValue();
+                updateClock();
             }, 1000);
 
             function runAlarms() {
@@ -76,10 +70,10 @@ function loadAlarmConfig() {
             this.create_alarm = true;
 
             this.alarm = {
-                "hour": this.time.hour,
-                "minute": this.time.minute,
-                "second": this.time.second,
-                "title": "",
+                hour: this.time.hour,
+                minute: this.time.minute,
+                second: this.time.second,
+                title: "",
                 "a": this.time.a
             };
         },
@@ -92,7 +86,6 @@ function loadAlarmConfig() {
             }
 
             const alarm_date = moment(`${this.alarm.hour}:${this.alarm.minute} ${this.alarm.a}`, 'hh:mm A')
-            
             const current_date = new moment().local()
             const diff = diffYMDHMS(alarm_date, current_date);
 
@@ -103,10 +96,9 @@ function loadAlarmConfig() {
             }
 
             let label = getAlarmLabel(diff);
-
             this.alarm.time = diff;
             this.alarm.start_time = alarm_date;
-            this.alarm.label = label;
+            this.alarm.label = "ring at : "+ alarm_date.format("h")+":"+alarm_date.format("m")+this.alarm.a;
             this.alarm.time_left = label;
             this.alarm.active = true;
             this.alarm.completed = false;
@@ -117,7 +109,6 @@ function loadAlarmConfig() {
             this.alarms.push(copyObject(this.alarm));
         },
         deactivateAlarm: function(item) {
-            console.log("Alarm deactivated : ", item);
             this.alarms = this.alarms.map((alarm) => {
                 if(alarm.index === item) {
                     
@@ -127,6 +118,15 @@ function loadAlarmConfig() {
                 }
                 return alarm;
             })
+        },
+        getAlarmClass: function getAlarmClass(item) {
+            if(!item.active) {
+                return "card mt-3 bg-dark text-white ";
+            } else if(item.completed) {
+                return "card mt-3 bg-warning text-white";
+            } else {
+                return "card mt-3 bg-light"
+            }
         }
     }
 }
@@ -144,11 +144,15 @@ function isAlarmCompleted(diff) {
 }
 
 function getAlarmLabel(diff) {
-    let label = '';
+    let label = 'Time left : ';
 
     ["hours", "minutes", "seconds"].map((key) =>  {
         if(diff[key] !== 0) {
-            label = label + `${diff[key]} ${key} `;
+
+            if (label !== "") {
+                label = label + ""
+            }
+            label = label + `${diff[key]}${key[0].toLowerCase()}.` ;
         }
     })
 

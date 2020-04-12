@@ -7,43 +7,33 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
         <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 
         <script src="js/alarm.js"></script>
     </head>
 
     <body>  
-        <div class="container-lg" x-data='loadAlarmConfig()' x-init='() =>  {
+        <div class="container" x-data='loadAlarmConfig()' x-init='() =>  {
             statTimer();
         }'>
-            <div class="row" >
+            <div class="row mt-5" >
                 <div class="col">
-                        <div class="col-md-12 text-center">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="row form-group text-center">
-                                        <div class="col">
-                                            <label for="">Hour</label>
-                                            <span type="text" x-text="time.hour"  class="form-control">
-                                        </div>
-                                        <div class="col">
-                                            <label for="">Minute</label>
-                                            <span type="text" x-text="time.minute"  class="form-control">
-                                        </div>
-                                        <div class="col">
-                                            <label for="">Seconds</label>
-                                            <span type="text" x-text="time.second"  class="form-control">
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12"> 
-                                            <button class="btn btn-info" @click="createAlarm()">Create Alarm</button>
-                                        </div>
-                                    </div>
-                                </div>
+                    <div class="col-md-12">
+                        <div class="card bg-dark ">
+                            <div class="card-body">
+                                <h3 class="card-title text-white">
+                                    <i class="fas fa-clock"></i>
+                                    <span type="text" x-text="time.hour"></span>:
+                                    <span type="text" x-text="time.minute"></span>:
+                                    <span type="text" x-text="time.second"></span>
+                                    <span type="text" x-text="time.a"></span>
+                                </h3>
+                                <a class="btn btn-light mt-2" @click="createAlarm()">Create Alarm</a>
                             </div>
+                        </div>
                     </div>
                         <div class="col-md-12">
-                            <div class="card">
+                            <div class="card bg-light mt-3">
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col" x-show="create_alarm">
@@ -54,7 +44,7 @@
                                                             <label for="">Title</label>
                                                             <input placeholder="Type alarm title here" type="text" x-model="alarm.title" class="form-control">
                                                         </div>
-                                                        <div class="w-100"></div>
+                                                        <div class="w-100 mt-4"></div>
                                                         <div class="col">
                                                             <label for="">Hour</label>
                                                             <input type="number" x-model="alarm.hour" class="form-control">
@@ -71,10 +61,10 @@
                                                             </select>
                                                         </div>
                                                     </div>
-                                                    <div class="row mt-2">
+                                                    <div class="row mt-4">
                                                         <div class="col-md-12">
-                                                            <button class="btn btn-primary" @click="saveAlarm()">
-                                                                Save
+                                                            <button class="btn btn-dark" @click="saveAlarm()">
+                                                                <i class="fas fa-check"></i>
                                                             </button>
                                                         </div>
                                                     </div>
@@ -96,39 +86,27 @@
                 <div class="col">
                     <div x-show="alarms.length > 0" class="row">
                         <div class="col-md-12">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th colspan="4" class="text-center">
-                                            ALARMS
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        <th>Title</th>
-                                        <th>Total Time</th>
-                                        <th>Time left</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <template x-for="item in alarms" :key="item">
-                                        <tr x-bind:class="{ 'alert-danger': !item.active }" >
-                                            <td x-text="item.title"></td>
-                                            <td x-text="item.label"></td>
-                                            <td x-text="item.time_left"></td>
-                                            <td>
-                                                <button x-show="item.active" @click="deactivateAlarm(item.index)" class="btn btn-danger">
-                                                    Stop
-                                                </button>
-                                                <button x-show="!item.active" class="btn btn-danger">
-                                                    Stopped
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </template>
-                                    
-                                </tbody>
-                            </table>
+                            <h2>Alarms</h2>
+                            <template x-for="item in alarms" :key="item">
+                                <div x-bind:class="getAlarmClass(item)">
+                                    <div class="card-body">
+                                        <h5 class="title">
+                                            <span x-text="item.title"></span> will
+                                            <span x-text="item.label"></span>
+                                        </h5>
+                                        <p class="h3 mt-2">
+                                            <i class="fas fa-bell mr-2"></i><span x-text="item.time_left"></span>
+                                        </p>
+                                        <hr>
+                                        <button x-show="item.active" @click="deactivateAlarm(item.index)" class="btn btn-danger">
+                                            Stop
+                                        </button>
+                                        <button x-show="!item.active" class="btn btn-success">
+                                            Stopped
+                                        </button>
+                                    </div>
+                                </div>
+                            </template>
                         </div>
                     </div>
         </div>
