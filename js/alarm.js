@@ -68,7 +68,6 @@ function loadAlarmConfig() {
         createAlarm: function() {
 
             this.create_alarm = true;
-
             this.alarm = {
                 hour: this.time.hour,
                 minute: this.time.minute,
@@ -138,7 +137,6 @@ function copyObject(alarm) {
 function isAlarmCompleted(diff) {
 
     return ["hours", "minutes", "seconds"].map((key) =>  {
-        
         return diff[key] <= 0;
     }).filter((key) => key === false).length === 0;
 }
@@ -159,18 +157,12 @@ function getAlarmLabel(diff) {
     return label;
 }
 
-
 function diffYMDHMS(date1, date2) {
 
     let hours = date1.diff(date2, 'hours');
     date2.add(hours, 'hours');
-
     let minutes = date1.diff(date2, 'minutes');
     date2.add(minutes, 'minutes');
-
     let seconds = date1.diff(date2, 'seconds');
-
-    console.log( hours + ' hours ' + minutes + ' minutes ' + seconds + ' seconds'); 
-
     return { hours, minutes, seconds};
 }

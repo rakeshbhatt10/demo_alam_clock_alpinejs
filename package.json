@@ -1,0 +1,19 @@
+{
+  "name": "alarm_click",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rakeshbhatt10/demo_alam_clock_alpinejs.git"
+  },
+  "author": "rakesh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rakeshbhatt10/demo_alam_clock_alpinejs/issues"
+  },
+  "homepage": "https://github.com/rakeshbhatt10/demo_alam_clock_alpinejs#readme"
+}
